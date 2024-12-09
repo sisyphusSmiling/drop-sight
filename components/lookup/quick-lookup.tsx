@@ -150,29 +150,6 @@ export function QuickLookup({ network }: QuickLookupProps) {
                 <span className="text-muted-foreground">N/A</span>
               )}
             </div>
-
-            {result.transactionId && (
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-muted-foreground">Transaction</h3>
-                <div className="flex items-center gap-2">
-                  <a
-                    href={`${getFlowscanUrl(network)}/transaction/${result.transactionId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-primary hover:underline break-all"
-                  >
-                    {truncateAddress(result.transactionId)}
-                  </a>
-                  <button
-                    onClick={() => copyToClipboard(result.transactionId!)}
-                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                    aria-label="Copy transaction ID"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}

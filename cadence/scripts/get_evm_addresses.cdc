@@ -10,7 +10,7 @@ view fun getCOAAddress(from address: Address): String? {
 }
 
 access(all)
-fun main(addresses: [Address]): {Address: String?} {
+fun main(addresses: [Address]): {Address: String} {
     let results: {Address: String?} = {}
 
     for address in addresses {

@@ -38,7 +38,7 @@ export const ResultsTable = ({ results, network }: ResultsTableProps) => {
                 </a>
               </td>
               <td className="p-4 align-middle">
-                {evmAddress ? (
+                {evmAddress && evmAddress !== "N/A" ? (
                   <a
                     href={`${evmFlowscanBaseUrl}/address/${evmAddress}`}
                     target="_blank"

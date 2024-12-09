@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { getFlowscanUrl, getEvmFlowscanUrl } from '@/lib/utils/network';
 import { executeSingleAddressScript } from '@/lib/flow/scripts';
 import { useToast } from "@/hooks/use-toast";
+import { Copy } from "lucide-react";
 
 interface QuickLookupProps {
   network: string;
@@ -18,7 +19,6 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      // Only trigger if not in an input/textarea
       if (
         document.activeElement?.tagName !== 'INPUT' &&
         document.activeElement?.tagName !== 'TEXTAREA' &&
@@ -56,8 +56,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast({
-        title: "Copied!",
-        description: "Address copied to clipboard",
+        title: "Address copied!"
       });
     });
   };
@@ -85,47 +84,47 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
       {evmAddress && (
         <div className="space-y-4">
-          <div className="p-4 border rounded-lg space-y-2">
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Flow Address</h3>
-                <p className="font-mono">{address}</p>
+          <div className="p-4 border rounded-lg space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium text-muted-foreground">Flow Address</h3>
+              <div className="flex items-center gap-2">
                 <a
-                  href={getFlowscanUrl(address, network)}
+                  href={`${getFlowscanUrl(network)}/account/${address}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-500 hover:underline"
+                  className="font-medium text-primary hover:underline"
                 >
-                  View on Flowscan
+                  {address}
                 </a>
+                <button
+                  onClick={() => copyToClipboard(address)}
+                  className="p-1 hover:bg-muted rounded-md transition-colors"
+                  aria-label="Copy Flow address"
+                >
+                  <Copy className="h-4 w-4" />
+                </button>
               </div>
-              <button
-                onClick={() => copyToClipboard(address)}
-                className="p-2 hover:bg-muted rounded-md"
-              >
-                Copy
-              </button>
             </div>
 
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-                <p className="font-mono">{evmAddress}</p>
+            <div className="space-y-1">
+              <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
+              <div className="flex items-center gap-2">
                 <a
-                  href={getEvmFlowscanUrl(evmAddress, network)}
+                  href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-500 hover:underline"
+                  className="font-medium text-primary hover:underline"
                 >
-                  View on Flowscan
+                  {evmAddress}
                 </a>
+                <button
+                  onClick={() => copyToClipboard(evmAddress)}
+                  className="p-1 hover:bg-muted rounded-md transition-colors"
+                  aria-label="Copy EVM address"
+                >
+                  <Copy className="h-4 w-4" />
+                </button>
               </div>
-              <button
-                onClick={() => copyToClipboard(evmAddress)}
-                className="p-2 hover:bg-muted rounded-md"
-              >
-                Copy
-              </button>
             </div>
           </div>
         </div>

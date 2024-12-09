@@ -1,6 +1,6 @@
-# Flow Address Lookup
+# DropSight
 
-A web utility for Flow blockchain address lookup with CSV input and Cadence script integration.
+A web utility for Flow blockchain Cadence & EVM address lookup
 
 ## Features
 

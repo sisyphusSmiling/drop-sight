@@ -11,8 +11,8 @@ interface QuickLookupProps {
 }
 
 export function QuickLookup({ network }: QuickLookupProps) {
-  const [address, setAddress] = useState('');
-  const [evmAddress, setEvmAddress] = useState('');
+  const [inputAddress, setInputAddress] = useState('');
+  const [result, setResult] = useState<{ flowAddress: string; evmAddress: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -35,12 +35,16 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!address) return;
+    if (!inputAddress) return;
 
     setIsLoading(true);
     try {
-      const result = await executeSingleAddressScript(address);
-      setEvmAddress(result);
+      const evmAddress = await executeSingleAddressScript(inputAddress);
+      setResult({
+        flowAddress: inputAddress,
+        evmAddress
+      });
+      setInputAddress(''); // Clear input after successful lookup
     } catch (error) {
       console.error('Error:', error);
       toast({
@@ -56,8 +60,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast({
-        title: "Copied!",
-        description: "Address copied to clipboard",
+        title: "Address copied!"
       });
     });
   };
@@ -74,8 +77,8 @@ export function QuickLookup({ network }: QuickLookupProps) {
         <input
           ref={inputRef}
           type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          value={inputAddress}
+          onChange={(e) => setInputAddress(e.target.value)}
           placeholder="Enter Flow address"
           className="flex-1 bg-background border rounded-md px-3 py-2"
           autoFocus
@@ -89,24 +92,24 @@ export function QuickLookup({ network }: QuickLookupProps) {
         </button>
       </form>
 
-      {evmAddress && (
+      {result && (
         <div className="space-y-4">
           <div className="p-4 border rounded-lg space-y-4">
             <div className="space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Flow Address</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">Cadence Address</h3>
               <div className="flex items-center gap-2">
                 <a
-                  href={`${getFlowscanUrl(network)}/account/${address}`}
+                  href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-primary hover:underline break-all"
                 >
-                  {truncateAddress(address)}
+                  {truncateAddress(result.flowAddress)}
                 </a>
                 <button
-                  onClick={() => copyToClipboard(address)}
+                  onClick={() => copyToClipboard(result.flowAddress)}
                   className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                  aria-label="Copy Flow address"
+                  aria-label="Copy Cadence address"
                 >
                   <Copy className="h-4 w-4" />
                 </button>
@@ -115,18 +118,18 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-              {evmAddress !== "N/A" ? (
+              {result.evmAddress !== "N/A" ? (
                 <div className="flex items-center gap-2">
                   <a
-                    href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
+                    href={`${getEvmFlowscanUrl(network)}/address/${result.evmAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-medium text-primary hover:underline break-all"
                   >
-                    {truncateAddress(evmAddress)}
+                    {truncateAddress(result.evmAddress)}
                   </a>
                   <button
-                    onClick={() => copyToClipboard(evmAddress)}
+                    onClick={() => copyToClipboard(result.evmAddress)}
                     className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
                     aria-label="Copy EVM address"
                   >

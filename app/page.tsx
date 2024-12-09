@@ -14,13 +14,13 @@ export default function Home() {
   }, [network]);
 
   return (
-    <div className="container mx-auto px-4 py-16 space-y-8">
+    <div className="container mx-auto px-4 py-8 sm:py-16 space-y-6 sm:space-y-8">
       <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <h1 className="text-4xl font-extrabold tracking-tight">DropSight</h1>
+        <div className="flex items-center flex-wrap gap-2">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">DropSight</h1>
           <NetworkSelector />
         </div>
-        <p className="text-muted-foreground">Lookup Flow EVM addresses by their native account</p>
+        <p className="text-muted-foreground text-sm sm:text-base">Target EVM addresses by looking up their Flow accounts</p>
       </div>
       
       <LookupTabs network={network} />

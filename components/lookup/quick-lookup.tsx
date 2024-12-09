@@ -56,9 +56,16 @@ export function QuickLookup({ network }: QuickLookupProps) {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       toast({
-        title: "Address copied!"
+        title: "Copied!",
+        description: "Address copied to clipboard",
       });
     });
+  };
+
+  const truncateAddress = (addr: string) => {
+    if (!addr) return addr;
+    if (window.innerWidth > 640) return addr; // Don't truncate on desktop
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
   return (
@@ -76,7 +83,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap"
         >
           {isLoading ? 'Loading...' : 'Lookup'}
         </button>
@@ -87,18 +94,18 @@ export function QuickLookup({ network }: QuickLookupProps) {
           <div className="p-4 border rounded-lg space-y-4">
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">Flow Address</h3>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <a
                   href={`${getFlowscanUrl(network)}/account/${address}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline"
+                  className="font-medium text-primary hover:underline break-all"
                 >
-                  {address}
+                  {truncateAddress(address)}
                 </a>
                 <button
                   onClick={() => copyToClipboard(address)}
-                  className="p-1 hover:bg-muted rounded-md transition-colors"
+                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
                   aria-label="Copy Flow address"
                 >
                   <Copy className="h-4 w-4" />
@@ -108,18 +115,18 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <a
                   href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline"
+                  className="font-medium text-primary hover:underline break-all"
                 >
-                  {evmAddress}
+                  {truncateAddress(evmAddress)}
                 </a>
                 <button
                   onClick={() => copyToClipboard(evmAddress)}
-                  className="p-1 hover:bg-muted rounded-md transition-colors"
+                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
                   aria-label="Copy EVM address"
                 >
                   <Copy className="h-4 w-4" />

@@ -20,7 +20,7 @@ export default function Home() {
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">DropSight</h1>
           <NetworkSelector />
         </div>
-        <p className="text-muted-foreground text-sm sm:text-base">Target EVM addresses by looking up their Flow accounts</p>
+        <p className="text-muted-foreground text-sm sm:text-base">Lookup cross-VM account associations on Flow</p>
       </div>
       
       <LookupTabs network={network} />

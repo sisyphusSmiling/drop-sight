@@ -45,7 +45,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn(inter.className, jetbrainsMono.variable)}>
         <NetworkProvider>
-          <main className="min-h-screen bg-background pb-20">
+          <main className="min-h-screen bg-background pb-[140px]">
             {children}
           </main>
           <Footer />

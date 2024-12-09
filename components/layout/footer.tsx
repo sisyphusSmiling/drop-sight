@@ -9,7 +9,7 @@ function NetworkSelector() {
   const { network, setNetwork, isNetworkChanging } = useNetwork();
   
   return (
-    <div className={cn("flex gap-2 border rounded-lg p-1 font-mono")}>
+    <div className={cn("flex gap-2 border rounded-lg p-1 font-mono bg-background/80 backdrop-blur-sm shadow-sm")}>
       {["mainnet", "testnet"].map((net) => (
         <button
           key={net}
@@ -63,11 +63,15 @@ function SocialLinks() {
 
 export function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t">
-      <div className="max-w-2xl mx-auto px-4 py-3 flex justify-between items-center">
+    <>
+      <div className="fixed bottom-[72px] left-0 right-0 flex justify-center z-50">
         <NetworkSelector />
-        <SocialLinks />
       </div>
-    </footer>
+      <footer className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t h-[52px] flex items-center">
+        <div className="max-w-2xl mx-auto px-4 w-full flex justify-center">
+          <SocialLinks />
+        </div>
+      </footer>
+    </>
   );
 } 

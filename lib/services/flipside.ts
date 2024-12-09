@@ -1,10 +1,12 @@
 import { Flipside } from "@flipsidecrypto/sdk";
 import { toast } from "@/hooks/use-toast";
 
-const FLIPSIDE_API_KEY = "666783bf-9a37-4dd9-919b-b4ed4772acd7";
+if (!process.env.NEXT_PUBLIC_FLIPSIDE_API_KEY) {
+  throw new Error('NEXT_PUBLIC_FLIPSIDE_API_KEY is not defined');
+}
 
 const flipside = new Flipside(
-  FLIPSIDE_API_KEY,
+  process.env.NEXT_PUBLIC_FLIPSIDE_API_KEY,
   "https://api-v2.flipsidecrypto.xyz"
 );
 

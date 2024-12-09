@@ -3,15 +3,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { QuickLookup } from "./quick-lookup"
 import { BulkLookup } from "./bulk-lookup"
+import { NetworkType } from "@/lib/context/network-context"
 
 interface LookupTabsProps {
-  network: string;
+  network: NetworkType;
 }
 
-export const LookupTabs = ({ network }: LookupTabsProps) => {
+export function LookupTabs({ network }: LookupTabsProps) {
   return (
-    <Tabs defaultValue="quick" className="space-y-8">
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs defaultValue="quick" className="space-y-4">
+      <TabsList>
         <TabsTrigger value="quick">Quick Lookup</TabsTrigger>
         <TabsTrigger value="bulk">Bulk Lookup</TabsTrigger>
       </TabsList>
@@ -23,4 +24,4 @@ export const LookupTabs = ({ network }: LookupTabsProps) => {
       </TabsContent>
     </Tabs>
   );
-}; 
+} 

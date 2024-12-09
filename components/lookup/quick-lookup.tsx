@@ -84,7 +84,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
           type="text"
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
-          placeholder={network === 'mainnet' ? "Enter Flow or EVM address" : "Enter Flow address"}
+          placeholder={network === 'mainnet' ? "Enter Flow or EVM address (0x...)" : "Enter Flow address (0x...)"}
           className="flex-1 bg-background border rounded-md px-3 py-2"
           autoFocus
         />

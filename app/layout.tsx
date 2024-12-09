@@ -8,6 +8,24 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] })
 export const metadata = {
   title: 'Flow Address Lookup',
   description: 'Utility tools for Flow blockchain addresses',
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+        sizes: 'any',
+      },
+      {
+        url: '/icon.png',
+        type: 'image/png',
+        sizes: '32x32',
+      },
+    ],
+    apple: {
+      url: '/apple-touch-icon.png',
+      sizes: '180x180',
+      type: 'image/png',
+    },
+  },
 }
 
 export default function RootLayout({

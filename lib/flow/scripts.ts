@@ -1,5 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
+import { configureFlow } from "./config";
 
 import GetEVMAddresses from '@/cadence/scripts/get_evm_addresses.cdc';
 import GetEVMAddress from '@/cadence/scripts/get_evm_address.cdc';
@@ -8,6 +9,9 @@ export const executeSingleAddressScript = async (address: string) => {
   const cadenceAddress = address.replace("0x", "");
 
   try {
+    // Ensure Flow is configured before executing the script
+    await configureFlow();
+    
     const response = await fcl.query({
       cadence: GetEVMAddress,
       args: () => [
@@ -26,6 +30,9 @@ export const executeAddressScript = async (addresses: string[]) => {
   const cadenceAddresses = addresses.map(addr => addr.replace("0x", ""));
 
   try {
+    // Ensure Flow is configured before executing the script
+    await configureFlow();
+    
     const response = await fcl.query({
       cadence: GetEVMAddresses,
       args: () => [

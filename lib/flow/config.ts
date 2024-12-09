@@ -2,14 +2,21 @@ import * as fcl from "@onflow/fcl";
 import flowConfig from "../../flow.json";
 
 const getNetworkFromEnv = (): "mainnet" | "testnet" => {
-  return (process.env.NEXT_PUBLIC_FLOW_NETWORK as "mainnet" | "testnet") || "testnet";
+  // Try to get from localStorage first
+  if (typeof window !== "undefined") {
+    const stored = localStorage.getItem("preferred-network");
+    if (stored === "mainnet" || stored === "testnet") {
+      return stored;
+    }
+  }
+  return "testnet";
 };
 
-export const configureFlow = () => {
+export const configureFlow = async () => {
   const network = getNetworkFromEnv();
   
   // Configure FCL with all options at once
-  fcl
+  await fcl
     .config({
       'flow.network': network,
       'accessNode.api': network === 'mainnet' 

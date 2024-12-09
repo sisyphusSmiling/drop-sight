@@ -1,7 +1,4 @@
 {
-  "env": {
-    "NEXT_PUBLIC_FLOW_NETWORK": "testnet"
-  },
   "git": {
     "deploymentEnabled": {
       "main": true,
@@ -10,8 +7,5 @@
   },
   "github": {
     "silent": true
-  },
-  "buildCommand": "next build",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  }
 } 

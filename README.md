@@ -2,26 +2,14 @@
 
 A web utility for Flow blockchain address lookup with CSV input and Cadence script integration.
 
-## Deployment Environments
+## Features
 
-The application supports two deployment environments:
-
-- **Mainnet** (Production): Deployed from the `main` branch
-- **Testnet** (Development): Deployed from the `develop` branch
-
-### Environment Variables
-
-Set the following environment variables in your Vercel project:
-
-For Mainnet (Production):
-```bash
-NEXT_PUBLIC_FLOW_NETWORK=mainnet
-```
-
-For Testnet (Development):
-```bash
-NEXT_PUBLIC_FLOW_NETWORK=testnet
-```
+- Quick lookup for single Flow addresses
+- Bulk lookup via CSV upload
+- Network selection (Mainnet/Testnet) with persistent user preference
+- Copy to clipboard functionality
+- Direct links to Flowscan
+- Keyboard shortcut (`/`) for quick lookup
 
 ## Development
 
@@ -39,18 +27,20 @@ npm run dev
 
 The application is automatically deployed to Vercel:
 
-- Push to `main` branch for Mainnet deployment
-- Push to `develop` branch for Testnet deployment
+- Push to `main` branch for production deployment
+- Push to `develop` branch for preview deployment
+
+### Network Selection
+
+The application supports both Mainnet and Testnet networks through a single deployment:
+- Users can switch between networks using the network selector in the UI
+- Network preference is persisted in the browser's localStorage
+- No environment variables or separate deployments needed
 
 ### Vercel Configuration
 
 The project uses standard Next.js build settings in Vercel:
-
-- **Build Command**: `next build`
-- **Install Command**: `npm install`
-- **Output Directory**: `.next` (automatically detected)
-- **Framework Preset**: Next.js
-
-These settings are automatically detected by Vercel, but they're also explicitly defined in `vercel.json` for clarity.
-
-Each environment will use its respective configuration based on the `NEXT_PUBLIC_FLOW_NETWORK` environment variable.
+- Framework Preset: Next.js
+- Build Command: `next build` (auto-detected)
+- Install Command: `npm install` (auto-detected)
+- Output Directory: `.next` (auto-detected)

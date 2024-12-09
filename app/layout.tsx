@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Toaster } from "@/components/ui/toaster"
 import { NetworkFooter } from '@/components/layout/network-footer'
 import { NetworkProvider } from '@/lib/context/network-context'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] })
 
@@ -44,6 +45,7 @@ export default function RootLayout({
           <NetworkFooter />
           <Toaster />
         </NetworkProvider>
+        <Analytics />
       </body>
     </html>
   )

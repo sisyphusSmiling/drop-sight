@@ -5,7 +5,6 @@ import { Footer } from '@/components/layout/footer'
 import { NetworkProvider } from '@/lib/context/network-context'
 import { Analytics } from '@vercel/analytics/react'
 import { cn } from '@/lib/utils'
-import { headers } from 'next/headers'
 import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] })
@@ -15,57 +14,48 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono'
 })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const host = 'drop-sight.vercel.app';
-
-  return {
+export const metadata: Metadata = {
+  title: 'DropSight 🎯',
+  description: 'Look up cross-VM account associations on Flow blockchain.',
+  keywords: ['Flow', 'blockchain', 'Cadence', 'EVM', 'address lookup', 'cross-VM'],
+  authors: [{ name: 'Gio', url: 'https://x.com/gio_incognito' }],
+  openGraph: {
+    type: 'website',
     title: 'DropSight 🎯',
     description: 'Look up cross-VM account associations on Flow blockchain.',
-    metadataBase: new URL(`${protocol}://${host}`),
-    keywords: ['Flow', 'blockchain', 'Cadence', 'EVM', 'address lookup', 'cross-VM'],
-    authors: [{ name: 'Gio', url: 'https://x.com/gio_incognito' }],
-    openGraph: {
-      type: 'website',
-      title: 'DropSight 🎯',
-      description: 'Look up cross-VM account associations on Flow blockchain.',
-      url: '/',
-      siteName: 'DropSight',
-      images: [
-        {
-          url: '/api/og',
-          width: 1200,
-          height: 630,
-          alt: 'DropSight - Flow Address Lookup Tool',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'DropSight 🎯',
-      description: 'Look up cross-VM account associations on Flow blockchain.',
-      creator: '@gio_incognito',
-      images: ['/api/og'],
-    },
-    icons: {
-      icon: [
-        {
-          url: '/favicon.ico',
-          sizes: 'any',
-        },
-        {
-          url: '/icon.png',
-          type: 'image/png',
-          sizes: '32x32',
-        },
-      ],
-      apple: {
-        url: '/apple-touch-icon.png',
-        sizes: '180x180',
-        type: 'image/png',
+    siteName: 'DropSight',
+    images: [{
+      url: '/og.png',
+      width: 1200,
+      height: 630,
+      alt: 'DropSight - Flow Address Lookup Tool',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'DropSight 🎯',
+    description: 'Look up cross-VM account associations on Flow blockchain.',
+    creator: '@gio_incognito',
+    images: ['/og.png'],
+  },
+  icons: {
+    icon: [
+      {
+        url: '/favicon.ico',
+        sizes: 'any',
       },
+      {
+        url: '/icon.png',
+        type: 'image/png',
+        sizes: '32x32',
+      },
+    ],
+    apple: {
+      url: '/apple-touch-icon.png',
+      sizes: '180x180',
+      type: 'image/png',
     },
-  }
+  },
 }
 
 export default function RootLayout({

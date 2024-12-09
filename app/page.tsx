@@ -17,7 +17,7 @@ export default function Home() {
     <div className="container mx-auto px-4 py-16 space-y-8">
       <div className="space-y-2">
         <div className="flex items-center gap-3">
-          <h1 className="text-4xl font-extrabold tracking-tight">Flow Address Lookup</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight">DropSight</h1>
           <NetworkSelector />
         </div>
         <p className="text-muted-foreground">Lookup Flow EVM addresses by their native account</p>

@@ -6,6 +6,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flipsidecrypto/sdk": "^2.1.0",
     "@onflow/fcl": "^1.13.1",
     "@onflow/types": "^1.4.1",
     "@radix-ui/react-dropdown-menu": "^2.1.2",

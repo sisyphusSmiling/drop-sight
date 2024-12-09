@@ -2,17 +2,25 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { getFlowscanUrl, getEvmFlowscanUrl } from '@/lib/utils/network';
-import { executeSingleAddressScript } from '@/lib/flow/scripts';
+import { lookupAddress } from '@/lib/flow/scripts';
 import { useToast } from "@/hooks/use-toast";
-import { Copy } from "lucide-react";
+import { Copy, Loader2 } from "lucide-react";
+import { NetworkType } from '@/lib/context/network-context';
 
 interface QuickLookupProps {
-  network: string;
+  network: NetworkType;
+}
+
+interface LookupResult {
+  flowAddress: string | null;
+  evmAddress: string | null;
+  transactionId?: string | null;
+  timestamp?: string | null;
 }
 
 export function QuickLookup({ network }: QuickLookupProps) {
   const [inputAddress, setInputAddress] = useState('');
-  const [result, setResult] = useState<{ flowAddress: string; evmAddress: string } | null>(null);
+  const [result, setResult] = useState<LookupResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -39,17 +47,14 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
     setIsLoading(true);
     try {
-      const evmAddress = await executeSingleAddressScript(inputAddress);
-      setResult({
-        flowAddress: inputAddress,
-        evmAddress
-      });
+      const result = await lookupAddress(inputAddress, network);
+      setResult(result);
       setInputAddress(''); // Clear input after successful lookup
     } catch (error) {
       console.error('Error:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch EVM address. Please check the Flow address and try again.",
+        description: error instanceof Error ? error.message : "Failed to lookup address. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -66,7 +71,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
   };
 
   const truncateAddress = (addr: string | null) => {
-    if (!addr || addr === "N/A") return addr;
+    if (!addr) return "N/A";
     if (window.innerWidth > 640) return addr;
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
@@ -79,16 +84,17 @@ export function QuickLookup({ network }: QuickLookupProps) {
           type="text"
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
-          placeholder="Enter Flow address"
+          placeholder={network === 'mainnet' ? "Enter Flow or EVM address" : "Enter Flow address"}
           className="flex-1 bg-background border rounded-md px-3 py-2"
           autoFocus
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap flex items-center gap-2"
         >
-          {isLoading ? 'Loading...' : 'Lookup'}
+          {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {isLoading ? 'Looking up...' : 'Lookup'}
         </button>
       </form>
 
@@ -97,28 +103,32 @@ export function QuickLookup({ network }: QuickLookupProps) {
           <div className="p-4 border rounded-lg space-y-4">
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">Cadence Address</h3>
-              <div className="flex items-center gap-2">
-                <a
-                  href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline break-all"
-                >
-                  {truncateAddress(result.flowAddress)}
-                </a>
-                <button
-                  onClick={() => copyToClipboard(result.flowAddress)}
-                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                  aria-label="Copy Cadence address"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
-              </div>
+              {result.flowAddress ? (
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary hover:underline break-all"
+                  >
+                    {truncateAddress(result.flowAddress)}
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard(result.flowAddress!)}
+                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                    aria-label="Copy Cadence address"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <span className="text-muted-foreground">N/A</span>
+              )}
             </div>
 
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-              {result.evmAddress !== "N/A" ? (
+              {result.evmAddress ? (
                 <div className="flex items-center gap-2">
                   <a
                     href={`${getEvmFlowscanUrl(network)}/address/${result.evmAddress}`}
@@ -129,7 +139,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
                     {truncateAddress(result.evmAddress)}
                   </a>
                   <button
-                    onClick={() => copyToClipboard(result.evmAddress)}
+                    onClick={() => copyToClipboard(result.evmAddress!)}
                     className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
                     aria-label="Copy EVM address"
                   >
@@ -140,9 +150,32 @@ export function QuickLookup({ network }: QuickLookupProps) {
                 <span className="text-muted-foreground">N/A</span>
               )}
             </div>
+
+            {result.transactionId && (
+              <div className="space-y-1">
+                <h3 className="text-sm font-medium text-muted-foreground">Transaction</h3>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`${getFlowscanUrl(network)}/transaction/${result.transactionId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary hover:underline break-all"
+                  >
+                    {truncateAddress(result.transactionId)}
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard(result.transactionId!)}
+                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                    aria-label="Copy transaction ID"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
     </div>
   );
-} 
+}

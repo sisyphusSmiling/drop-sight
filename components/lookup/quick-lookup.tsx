@@ -62,9 +62,9 @@ export function QuickLookup({ network }: QuickLookupProps) {
     });
   };
 
-  const truncateAddress = (addr: string) => {
-    if (!addr) return addr;
-    if (window.innerWidth > 640) return addr; // Don't truncate on desktop
+  const truncateAddress = (addr: string | null) => {
+    if (!addr || addr === "N/A") return addr;
+    if (window.innerWidth > 640) return addr;
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
@@ -94,7 +94,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
           <div className="p-4 border rounded-lg space-y-4">
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">Flow Address</h3>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
                 <a
                   href={`${getFlowscanUrl(network)}/account/${address}`}
                   target="_blank"
@@ -115,23 +115,27 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
             <div className="space-y-1">
               <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-              <div className="flex items-center gap-2 flex-wrap">
-                <a
-                  href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline break-all"
-                >
-                  {truncateAddress(evmAddress)}
-                </a>
-                <button
-                  onClick={() => copyToClipboard(evmAddress)}
-                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                  aria-label="Copy EVM address"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
-              </div>
+              {evmAddress !== "N/A" ? (
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-primary hover:underline break-all"
+                  >
+                    {truncateAddress(evmAddress)}
+                  </a>
+                  <button
+                    onClick={() => copyToClipboard(evmAddress)}
+                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                    aria-label="Copy EVM address"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <span className="text-muted-foreground">N/A</span>
+              )}
             </div>
           </div>
         </div>

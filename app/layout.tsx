@@ -1,11 +1,17 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Toaster } from "@/components/ui/toaster"
-import { NetworkFooter } from '@/components/layout/network-footer'
+import { Footer } from '@/components/layout/footer'
 import { NetworkProvider } from '@/lib/context/network-context'
 import { Analytics } from '@vercel/analytics/react'
+import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] })
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'], 
+  weight: ['400', '700'],
+  variable: '--font-mono'
+})
 
 export const metadata = {
   title: 'Flow Address Lookup',
@@ -37,12 +43,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>
+      <body className={cn(inter.className, jetbrainsMono.variable)}>
         <NetworkProvider>
           <main className="min-h-screen bg-background pb-20">
             {children}
           </main>
-          <NetworkFooter />
+          <Footer />
           <Toaster />
         </NetworkProvider>
         <Analytics />

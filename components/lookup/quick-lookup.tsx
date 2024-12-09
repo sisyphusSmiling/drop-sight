@@ -109,7 +109,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
                     href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-primary hover:underline break-all"
+                    className="font-mono font-medium text-primary hover:underline break-all"
                   >
                     {truncateAddress(result.flowAddress)}
                   </a>
@@ -134,7 +134,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
                     href={`${getEvmFlowscanUrl(network)}/address/${result.evmAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-primary hover:underline break-all"
+                    className="font-mono font-medium text-primary hover:underline break-all"
                   >
                     {truncateAddress(result.evmAddress)}
                   </a>

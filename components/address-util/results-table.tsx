@@ -59,7 +59,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
                       href={`${getFlowscanUrl(network)}/account/${flowAddress}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-primary hover:underline break-all"
+                      className="font-mono font-medium text-primary hover:underline break-all"
                     >
                       {truncateAddress(flowAddress)}
                     </a>
@@ -70,7 +70,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
                         href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-primary hover:underline break-all"
+                        className="font-mono font-medium text-primary hover:underline break-all"
                       >
                         {truncateAddress(evmAddress)}
                       </a>

@@ -1,14 +1,4 @@
-import { Flipside } from "@flipsidecrypto/sdk";
 import { toast } from "@/hooks/use-toast";
-
-if (!process.env.NEXT_PUBLIC_FLIPSIDE_API_KEY) {
-  throw new Error('NEXT_PUBLIC_FLIPSIDE_API_KEY is not defined');
-}
-
-const flipside = new Flipside(
-  process.env.NEXT_PUBLIC_FLIPSIDE_API_KEY,
-  "https://api-v2.flipsidecrypto.xyz"
-);
 
 export interface FlipsideQueryResult {
   TX_ID: string;
@@ -23,39 +13,25 @@ function formatAddress(address: string): string {
 }
 
 export async function queryFlipside(evmAddress: string, contractAddress: string): Promise<FlipsideQueryResult[]> {
-  const formattedAddress = formatAddress(evmAddress);
-  
-  const query = `
-    WITH COA_CREATION AS (
-      SELECT *
-      FROM flow.core.fact_events
-      WHERE EVENT_CONTRACT LIKE 'A.${contractAddress}.EVM'
-      AND EVENT_TYPE LIKE 'CadenceOwnedAccountCreated' AND TX_SUCCEEDED
-    )
-    
-    SELECT TX_ID, BLOCK_TIMESTAMP, EVENT_CONTRACT, EVENT_TYPE, EVENT_DATA:address :: STRING as ADDRESS
-    FROM COA_CREATION
-    WHERE ADDRESS = '${formattedAddress}'
-  `;
-
   try {
-    const result = await flipside.query.run({
-      sql: query,
-      ttlMinutes: 10,
-      cached: true
+    const response = await fetch('/api/flipside', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        evmAddress,
+        contractAddress,
+      }),
     });
 
-    if (!result?.rows?.length) {
-      return [];
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to query Flipside API');
     }
 
-    return result.rows.map(row => ({
-      TX_ID: String(row[0] || ''),
-      BLOCK_TIMESTAMP: String(row[1] || ''),
-      EVENT_CONTRACT: String(row[2] || ''),
-      EVENT_TYPE: String(row[3] || ''),
-      ADDRESS: String(row[4] || '')
-    }));
+    const data = await response.json();
+    return data.results;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error(error.message);

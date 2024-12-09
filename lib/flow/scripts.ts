@@ -1,8 +1,8 @@
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-import GetEVMAddresses from '../../cadence/scripts/get_evm_addresses.cdc';
-import GetEVMAddress from '../../cadence/scripts/get_evm_address.cdc';
+import GetEVMAddresses from '@/cadence/scripts/get_evm_addresses.cdc';
+import GetEVMAddress from '@/cadence/scripts/get_evm_address.cdc';
 
 export const executeSingleAddressScript = async (address: string) => {
   const cadenceAddress = address.replace("0x", "");

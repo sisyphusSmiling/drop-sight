@@ -1,4 +1,4 @@
-import EVM from 0x8c5303eaa26202d6
+import "EVM"
 
 access(all)
 view fun getCOAAddress(from address: Address): String? {

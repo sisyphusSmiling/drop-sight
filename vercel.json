@@ -1,0 +1,11 @@
+{
+  "env": {
+    "NEXT_PUBLIC_FLOW_NETWORK": "testnet"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "staging": true
+    }
+  }
+} 

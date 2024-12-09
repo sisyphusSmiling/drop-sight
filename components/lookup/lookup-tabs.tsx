@@ -13,8 +13,8 @@ export function LookupTabs({ network }: LookupTabsProps) {
   return (
     <Tabs defaultValue="quick" className="space-y-4">
       <TabsList>
-        <TabsTrigger value="quick">Quick Lookup</TabsTrigger>
-        <TabsTrigger value="bulk">Bulk Lookup</TabsTrigger>
+        <TabsTrigger value="quick">Quick</TabsTrigger>
+        <TabsTrigger value="bulk">Bulk</TabsTrigger>
       </TabsList>
       <TabsContent value="quick">
         <QuickLookup network={network} />

@@ -10,7 +10,7 @@ export const executeSingleAddressScript = async (address: string) => {
   try {
     const response = await fcl.query({
       cadence: GetEVMAddress,
-      args: (arg, t) => [
+      args: () => [
         fcl.arg(`0x${cadenceAddress}`, t.Address)
       ],
     });
@@ -28,7 +28,7 @@ export const executeAddressScript = async (addresses: string[]) => {
   try {
     const response = await fcl.query({
       cadence: GetEVMAddresses,
-      args: (arg, t) => [
+      args: () => [
         fcl.arg(cadenceAddresses.map(addr => `0x${addr}`), t.Array(t.Address))
       ],
     });

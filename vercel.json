@@ -5,7 +5,13 @@
   "git": {
     "deploymentEnabled": {
       "main": true,
-      "staging": true
+      "develop": true
     }
-  }
+  },
+  "github": {
+    "silent": true
+  },
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "framework": "nextjs"
 } 

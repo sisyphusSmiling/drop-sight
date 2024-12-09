@@ -63,12 +63,17 @@ export const CSVUpload = ({ onAddressesLoaded, onError }: CSVUploadProps) => {
         }}
         id="csv-upload"
       />
-      <label
-        htmlFor="csv-upload"
-        className="cursor-pointer text-primary hover:text-primary/80"
-      >
-        Click to upload or drag and drop your CSV file here
-      </label>
+      <div className="space-y-2">
+        <label
+          htmlFor="csv-upload"
+          className="cursor-pointer text-primary hover:text-primary/80"
+        >
+          Click to upload or drag and drop your CSV file here
+        </label>
+        <p className="text-sm text-muted-foreground">
+          CSV should contain Flow-native (Cadence) addresses separated by commas
+        </p>
+      </div>
     </div>
   );
 }; 

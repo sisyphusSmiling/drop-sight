@@ -2,10 +2,12 @@
 
 import { useEffect } from 'react';
 import { configureFlow } from '@/lib/flow/config';
-import { LookupTabs } from '@/components/lookup/lookup-tabs';
+import { QuickLookup } from '@/components/lookup/quick-lookup';
+import { BulkLookup } from '@/components/lookup/bulk-lookup';
 import { NetworkSelector } from '@/components/layout/network-selector';
 import { useNetwork } from '@/lib/context/network-context';
-import { cn } from '@/lib/utils';
+import { SectionHeader } from '@/components/ui/section-header';
+import { Divider } from '@/components/ui/divider';
 
 export default function Home() {
   const { network } = useNetwork();
@@ -15,7 +17,8 @@ export default function Home() {
   }, [network]);
 
   return (
-    <div className="container mx-auto px-4 py-8 sm:py-16 space-y-6 sm:space-y-8">
+    <div className="container max-w-3xl mx-auto px-4 py-8 sm:py-16 space-y-12">
+      {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center flex-wrap gap-2">
           <h1 className="text-3xl sm:text-4xl font-mono font-extrabold tracking-tight flex items-center gap-2">
@@ -26,7 +29,27 @@ export default function Home() {
         <p className="text-muted-foreground text-sm sm:text-base">Lookup cross-VM account associations on Flow</p>
       </div>
       
-      <LookupTabs network={network} />
+      {/* Quick Lookup Section */}
+      <section className="space-y-4">
+        <SectionHeader 
+          title="Quick Lookup"
+          description="Enter a Flow or EVM address to find its cross-VM association"
+        />
+        <div className="max-w-2xl">
+          <QuickLookup network={network} />
+        </div>
+      </section>
+
+      <Divider />
+
+      {/* Bulk Lookup Section */}
+      <section className="space-y-4">
+        <SectionHeader 
+          title="Bulk Lookup"
+          description="Upload a CSV file containing Flow addresses for batch processing"
+        />
+        <BulkLookup network={network} />
+      </section>
     </div>
   );
 } 

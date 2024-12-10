@@ -28,6 +28,13 @@ export const BulkLookup = ({ network }: BulkLookupProps) => {
     }
   };
 
+  const formatResults = () => {
+    return Object.entries(results).map(([flowAddress, evmAddress]) => ({
+      flowAddress,
+      evmAddress
+    }));
+  };
+
   return (
     <div className="space-y-8">
       {error && (
@@ -44,7 +51,7 @@ export const BulkLookup = ({ network }: BulkLookupProps) => {
       {loading ? (
         <div className="text-center text-muted-foreground">Processing addresses...</div>
       ) : (
-        Object.keys(results).length > 0 && <ResultsTable results={results} network={network} />
+        Object.keys(results).length > 0 && <ResultsTable results={formatResults()} network={network} />
       )}
     </div>
   );

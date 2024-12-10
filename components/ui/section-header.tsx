@@ -4,6 +4,8 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ title }: SectionHeaderProps) {
   return (
-    <h2 className="text-lg font-mono font-semibold">{title}</h2>
+    <div className="flex items-center gap-2">
+      <h2 className="text-lg font-mono font-bold tracking-tight">{title}</h2>
+    </div>
   );
 } 

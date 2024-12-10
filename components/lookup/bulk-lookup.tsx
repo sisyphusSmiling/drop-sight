@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { CSVUpload } from '@/components/address-util/csv-upload';
 import { ResultsTable } from '@/components/address-util/results-table';
 import { executeAddressScript } from '@/lib/flow/scripts';
+import { NetworkType } from '@/lib/context/network-context';
 
 interface BulkLookupProps {
-  network: string;
+  network: NetworkType;
 }
 
 export const BulkLookup = ({ network }: BulkLookupProps) => {

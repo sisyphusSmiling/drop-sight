@@ -6,6 +6,7 @@ import { NetworkProvider } from '@/lib/context/network-context'
 import { Analytics } from '@vercel/analytics/react'
 import { cn } from '@/lib/utils'
 import { Metadata } from 'next'
+import { ThemeProvider } from '@/lib/context/theme-context'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '700'] })
 const jetbrainsMono = JetBrains_Mono({ 
@@ -64,15 +65,32 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark')
+                } else {
+                  document.documentElement.classList.remove('dark')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
       <body className={cn(inter.className, jetbrainsMono.variable)}>
-        <NetworkProvider>
-          <main className="min-h-screen bg-background pb-[140px]">
-            {children}
-          </main>
-          <Footer />
-          <Toaster />
-        </NetworkProvider>
+        <ThemeProvider>
+          <NetworkProvider>
+            <main className="min-h-screen bg-background pb-[140px]">
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+          </NetworkProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

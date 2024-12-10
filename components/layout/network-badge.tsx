@@ -9,9 +9,8 @@ export function NetworkBadge() {
   return (
     <div
       className={cn(
-        "px-3 py-1 rounded-md capitalize text-sm font-medium",
-        network === "mainnet" && "bg-green-500/10 text-green-500",
-        network === "testnet" && "bg-blue-500/10 text-blue-500"
+        "network-badge",
+        network === "mainnet" ? "network-badge-mainnet" : "network-badge-testnet"
       )}
     >
       {network}

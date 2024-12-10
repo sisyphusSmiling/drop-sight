@@ -30,7 +30,7 @@
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
+    --ring: 240 5.9% 10%;
 
     --radius: 0.5rem;
 
@@ -77,15 +77,40 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-bold;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
     @apply bg-background text-foreground;
+  }
+} 
+
+@layer components {
+  .network-badge {
+    @apply px-3 py-1 rounded-md capitalize text-sm font-mono font-bold transition-colors;
+  }
+
+  .network-badge-mainnet {
+    @apply bg-green-500 text-green-200 dark:bg-green-900 dark:text-green-400;
+  }
+
+  .network-badge-testnet {
+    @apply bg-blue-500 text-blue-200 dark:bg-blue-900 dark:text-blue-400;
+  }
+
+  .link-hover {
+    @apply text-foreground hover:text-green-500 hover:underline transition-colors;
+  }
+
+  .na-text {
+    @apply text-muted-foreground;
+  }
+
+  .address-container {
+    @apply flex items-center gap-2 font-mono;
+  }
+
+  .copy-button {
+    @apply p-1 hover:bg-muted rounded-md transition-colors shrink-0;
+  }
+
+  .copy-icon {
+    @apply h-3.5 w-3.5 text-muted-foreground;
   }
 } 

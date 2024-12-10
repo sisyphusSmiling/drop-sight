@@ -1,23 +1,22 @@
 'use client'
 
-import { getFlowscanUrl, getEvmFlowscanUrl } from '@/lib/utils/network';
+import { NetworkType } from '@/lib/context/network-context';
+import { getFlowscanUrl } from '@/lib/utils/network';
 import { Copy, Download } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
+import { shortenAddress } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ResultsTableProps {
-  results: Record<string, string | null>;
-  network: string;
+  results: Array<{
+    flowAddress: string | null;
+    evmAddress: string | null;
+  }>;
+  network: NetworkType;
 }
 
 export function ResultsTable({ results, network }: ResultsTableProps) {
   const { toast } = useToast();
-
-  const truncateAddress = (addr: string | null) => {
-    if (!addr) return "N/A";
-    if (addr === "N/A") return addr;
-    if (window.innerWidth > 640) return addr;
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
-  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -28,11 +27,9 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
   };
 
   const exportToCSV = () => {
-    const csvContent = Object.entries(results)
-      .map(([cadence, evm]) => `${cadence},${evm || 'N/A'}`)
-      .join('\n');
-    
-    const blob = new Blob([`Cadence Address,EVM Address\n${csvContent}`], { type: 'text/csv' });
+    const csvData = `Flow Address,EVM Address\n${results.map(r => `${r.flowAddress || 'N/A'},${r.evmAddress || 'N/A'}`).join('\n')}`;
+
+    const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -41,71 +38,71 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
     window.URL.revokeObjectURL(url);
   };
 
+  const renderAddress = (address: string | null, type: 'flow' | 'evm') => {
+    if (!address || address === 'N/A') {
+      return <span className="na-text">N/A</span>;
+    }
+
+    const baseUrl = getFlowscanUrl(network, type);
+    const formattedAddress = type === 'flow' && address.startsWith('0x')
+      ? address.slice(2)
+      : address;
+    const url = type === 'flow'
+      ? `${baseUrl}/account/${formattedAddress}`
+      : `${baseUrl}/address/${address}`;
+
+    return (
+      <div className="address-container">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-hover"
+        >
+          {window.innerWidth > 640 ? address : shortenAddress(address)}
+        </a>
+        <button
+          onClick={() => copyToClipboard(address)}
+          className="copy-button"
+          aria-label={`Copy ${type === 'flow' ? 'Flow' : 'EVM'} address`}
+        >
+          <Copy className="copy-icon" />
+        </button>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button
+        <Button
           onClick={exportToCSV}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary hover:text-primary/80"
+          variant="outline"
+          size="sm"
+          className="gap-2"
         >
           <Download className="h-4 w-4" />
           Export CSV
-        </button>
+        </Button>
       </div>
-      
+
       <div className="rounded-lg border">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b bg-muted/50">
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Flow Address</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">EVM Address</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Flow Address</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">EVM Address</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(results).map(([flowAddress, evmAddress]) => (
-                <tr key={flowAddress} className="border-b last:border-0">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <a
-                        href={`${getFlowscanUrl(network)}/account/${flowAddress}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono font-medium text-primary hover:underline break-all text-sm"
-                      >
-                        {truncateAddress(flowAddress)}
-                      </a>
-                      <button
-                        onClick={() => copyToClipboard(flowAddress)}
-                        className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                        aria-label="Copy Flow address"
-                      >
-                        <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                      </button>
-                    </div>
+              {results.map((result, index) => (
+                <tr key={index} className="border-b">
+                  <td className="p-4 align-middle">
+                    {renderAddress(result.flowAddress, 'flow')}
                   </td>
-                  <td className="px-4 py-3">
-                    {evmAddress && evmAddress !== "N/A" ? (
-                      <div className="flex items-center gap-2">
-                        <a
-                          href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-mono font-medium text-primary hover:underline break-all text-sm"
-                        >
-                          {truncateAddress(evmAddress)}
-                        </a>
-                        <button
-                          onClick={() => copyToClipboard(evmAddress)}
-                          className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                          aria-label="Copy EVM address"
-                        >
-                          <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground text-sm">N/A</span>
-                    )}
+                  <td className="p-4 align-middle">
+                    {renderAddress(result.evmAddress, 'evm')}
                   </td>
                 </tr>
               ))}
@@ -115,4 +112,4 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
       </div>
     </div>
   );
-} 
+}

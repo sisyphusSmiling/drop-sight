@@ -25,9 +25,9 @@ export function NetworkSelector() {
           onClick={() => setNetwork(net)}
           disabled={isNetworkChanging}
           className={cn(
-            "px-3 py-1 rounded-md capitalize text-sm font-mono font-medium transition-colors flex items-center gap-2",
-            network === net && net === "mainnet" && "bg-green-500/10 text-green-500",
-            network === net && net === "testnet" && "bg-blue-500/10 text-blue-500",
+            "network-badge flex items-center gap-2",
+            network === net && net === "mainnet" && "network-badge-mainnet",
+            network === net && net === "testnet" && "network-badge-testnet",
             network !== net && "hover:bg-muted",
             isNetworkChanging && "opacity-50 cursor-not-allowed"
           )}
@@ -51,9 +51,9 @@ export function NetworkSelector() {
         <DropdownMenuTrigger disabled={isNetworkChanging} className="flex items-center">
           <div
             className={cn(
-              "px-3 py-1 rounded-md capitalize text-sm font-mono font-medium transition-colors flex items-center gap-2",
-              network === "mainnet" && "bg-green-500/10 text-green-500",
-              network === "testnet" && "bg-blue-500/10 text-blue-500",
+              "network-badge flex items-center gap-2",
+              network === "mainnet" && "network-badge-mainnet",
+              network === "testnet" && "network-badge-testnet",
               isNetworkChanging && "opacity-50 cursor-not-allowed"
             )}
           >

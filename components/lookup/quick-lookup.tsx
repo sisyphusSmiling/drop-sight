@@ -78,20 +78,20 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="flex gap-4">
+      <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           ref={inputRef}
           type="text"
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
-          placeholder={network === 'mainnet' ? "Enter Flow or EVM address (0x...)" : "Enter Flow address (0x...)"}
-          className="flex-1 bg-background border rounded-md px-3 py-2"
+          placeholder={network === 'mainnet' ? "Enter Flow or EVM address" : "Enter Flow address"}
+          className="flex-1 bg-background border rounded-md px-3 py-2 text-sm"
           autoFocus
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap flex items-center gap-2"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap flex items-center gap-2 text-sm font-bold"
         >
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           {isLoading ? 'Looking up...' : 'Lookup'}
@@ -99,57 +99,55 @@ export function QuickLookup({ network }: QuickLookupProps) {
       </form>
 
       {result && (
-        <div className="space-y-4">
-          <div className="p-4 border rounded-lg space-y-4">
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Cadence Address</h3>
-              {result.flowAddress ? (
-                <div className="flex items-center gap-2">
-                  <a
-                    href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono font-medium text-primary hover:underline break-all"
-                  >
-                    {truncateAddress(result.flowAddress)}
-                  </a>
-                  <button
-                    onClick={() => copyToClipboard(result.flowAddress!)}
-                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                    aria-label="Copy Cadence address"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : (
-                <span className="text-muted-foreground">N/A</span>
-              )}
-            </div>
+        <div className="rounded-lg border divide-y">
+          <div className="p-4 space-y-1">
+            <h3 className="text-sm font-medium text-muted-foreground">Cadence Address</h3>
+            {result.flowAddress ? (
+              <div className="flex items-center gap-2">
+                <a
+                  href={`${getFlowscanUrl(network)}/account/${result.flowAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono font-medium text-primary hover:underline break-all text-sm"
+                >
+                  {truncateAddress(result.flowAddress)}
+                </a>
+                <button
+                  onClick={() => copyToClipboard(result.flowAddress!)}
+                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                  aria-label="Copy Cadence address"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <span className="text-muted-foreground text-sm">N/A</span>
+            )}
+          </div>
 
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
-              {result.evmAddress ? (
-                <div className="flex items-center gap-2">
-                  <a
-                    href={`${getEvmFlowscanUrl(network)}/address/${result.evmAddress}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono font-medium text-primary hover:underline break-all"
-                  >
-                    {truncateAddress(result.evmAddress)}
-                  </a>
-                  <button
-                    onClick={() => copyToClipboard(result.evmAddress!)}
-                    className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
-                    aria-label="Copy EVM address"
-                  >
-                    <Copy className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : (
-                <span className="text-muted-foreground">N/A</span>
-              )}
-            </div>
+          <div className="p-4 space-y-1">
+            <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
+            {result.evmAddress ? (
+              <div className="flex items-center gap-2">
+                <a
+                  href={`${getEvmFlowscanUrl(network)}/address/${result.evmAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono font-medium text-primary hover:underline break-all text-sm"
+                >
+                  {truncateAddress(result.evmAddress)}
+                </a>
+                <button
+                  onClick={() => copyToClipboard(result.evmAddress!)}
+                  className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                  aria-label="Copy EVM address"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <span className="text-muted-foreground text-sm">N/A</span>
+            )}
           </div>
         </div>
       )}

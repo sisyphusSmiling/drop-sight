@@ -46,7 +46,7 @@ export function Footer() {
         <div className="max-w-2xl mx-auto px-4 w-full flex justify-center">
           <div className="flex items-center justify-center gap-4">
             <Link
-              href="https://github.com/giovanniabbruzzo/drop-sight"
+              href="https://github.com/sisyphusSmiling/drop-sight"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(

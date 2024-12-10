@@ -2,9 +2,18 @@
 
 import { useNetwork } from "@/lib/context/network-context";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 export function NetworkBadge() {
-  const { network } = useNetwork();
+  const { network, isLoading } = useNetwork();
+  
+  if (isLoading) {
+    return (
+      <div className="network-badge opacity-50">
+        <Loader2 className="h-3 w-3 animate-spin" />
+      </div>
+    );
+  }
   
   return (
     <div

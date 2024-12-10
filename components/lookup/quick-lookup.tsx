@@ -125,38 +125,6 @@ export function QuickLookup({ network }: QuickLookupProps) {
             <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
             {renderAddress(result.evmAddress, 'evm')}
           </div>
-
-          {result.transactionId && (
-            <div className="p-4 space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Transaction</h3>
-              <div className="address-container">
-                <a
-                  href={`${getFlowscanUrl(network, 'flow')}/transaction/${result.transactionId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-hover"
-                >
-                  {window.innerWidth > 640 ? result.transactionId : shortenAddress(result.transactionId)}
-                </a>
-                <button
-                  onClick={() => copyToClipboard(result.transactionId!)}
-                  className="copy-button"
-                  aria-label="Copy transaction ID"
-                >
-                  <Copy className="copy-icon" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {result.timestamp && (
-            <div className="p-4 space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Timestamp</h3>
-              <span className="text-sm">
-                {new Date(result.timestamp).toLocaleString()}
-              </span>
-            </div>
-          )}
         </div>
       )}
     </div>

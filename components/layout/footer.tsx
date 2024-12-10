@@ -6,8 +6,19 @@ import { Loader2, Github, Twitter } from "lucide-react";
 import Link from "next/link";
 
 function NetworkSelector() {
-  const { network, setNetwork, isNetworkChanging } = useNetwork();
+  const { network, setNetwork, isNetworkChanging, isLoading } = useNetwork();
   
+  if (isLoading) {
+    return (
+      <div className={cn("flex gap-2 border rounded-lg p-1 font-mono bg-background/80 backdrop-blur-sm shadow-sm")}>
+        <div className="px-4 py-1 rounded-md flex items-center gap-2 text-sm tracking-tight opacity-50">
+          <Loader2 className="h-3 w-3 animate-spin" />
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex gap-2 border rounded-lg p-1 font-mono bg-background/80 backdrop-blur-sm shadow-sm")}>
       {["mainnet", "testnet"].map((net) => (

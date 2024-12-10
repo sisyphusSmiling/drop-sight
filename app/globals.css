@@ -103,7 +103,7 @@
   }
 
   .address-container {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-2 font-mono;
   }
 
   .copy-button {

@@ -101,8 +101,11 @@ export function QuickLookup({ network }: QuickLookupProps) {
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
           placeholder={network === 'mainnet' ? "Enter Flow or EVM address" : "Enter Flow address"}
-          className="flex-1 bg-background border rounded-md px-3 py-2 text-sm"
+          className="flex-1 bg-background border rounded-md px-3 py-2 text-base sm:text-sm"
           autoFocus
+          autoComplete="off"
+          data-1p-ignore
+          data-lpignore="true"
         />
         <button
           type="submit"
@@ -125,38 +128,6 @@ export function QuickLookup({ network }: QuickLookupProps) {
             <h3 className="text-sm font-medium text-muted-foreground">EVM Address</h3>
             {renderAddress(result.evmAddress, 'evm')}
           </div>
-
-          {result.transactionId && (
-            <div className="p-4 space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Transaction</h3>
-              <div className="address-container">
-                <a
-                  href={`${getFlowscanUrl(network, 'flow')}/transaction/${result.transactionId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-hover"
-                >
-                  {window.innerWidth > 640 ? result.transactionId : shortenAddress(result.transactionId)}
-                </a>
-                <button
-                  onClick={() => copyToClipboard(result.transactionId!)}
-                  className="copy-button"
-                  aria-label="Copy transaction ID"
-                >
-                  <Copy className="copy-icon" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {result.timestamp && (
-            <div className="p-4 space-y-1">
-              <h3 className="text-sm font-medium text-muted-foreground">Timestamp</h3>
-              <span className="text-sm">
-                {new Date(result.timestamp).toLocaleString()}
-              </span>
-            </div>
-          )}
         </div>
       )}
     </div>

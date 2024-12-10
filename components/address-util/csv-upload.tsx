@@ -64,12 +64,11 @@ export const CSVUpload = ({ onAddressesLoaded, onError }: CSVUploadProps) => {
         id="csv-upload"
       />
       <div className="space-y-2">
-        <label
-          htmlFor="csv-upload"
-          className="cursor-pointer text-primary hover:text-primary/80"
-        >
-          Click to upload or drag and drop your CSV file here
-        </label>
+        <div className="flex flex-col items-center justify-center gap-2">
+          <label htmlFor="csv-upload" className="text-sm link-hover cursor-pointer">
+            Click to upload or drag and drop your CSV file here
+          </label>
+        </div>
         <p className="text-sm text-muted-foreground">
           CSV should contain Flow-native (Cadence) addresses separated by commas
         </p>

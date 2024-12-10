@@ -101,7 +101,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
           value={inputAddress}
           onChange={(e) => setInputAddress(e.target.value)}
           placeholder={network === 'mainnet' ? "Enter Flow or EVM address" : "Enter Flow address"}
-          className="flex-1 bg-background border rounded-md px-3 py-2 text-sm"
+          className="flex-1 bg-background border rounded-md px-3 py-2 text-base sm:text-sm"
           autoFocus
         />
         <button

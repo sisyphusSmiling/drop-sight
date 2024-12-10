@@ -42,10 +42,7 @@ export default function Home() {
       
       {/* Quick Lookup Section */}
       <section className="space-y-4">
-        <SectionHeader 
-          title="Quick Lookup"
-          description="Enter a Flow or EVM address to find its cross-VM association"
-        />
+        <SectionHeader title="Quick Lookup" />
         <div className="max-w-2xl">
           <QuickLookup network={network} />
         </div>
@@ -55,10 +52,7 @@ export default function Home() {
 
       {/* Bulk Lookup Section */}
       <section className="space-y-4">
-        <SectionHeader 
-          title="Bulk Lookup"
-          description="Upload a CSV file containing Flow addresses for batch processing"
-        />
+        <SectionHeader title="Bulk Lookup" />
         <BulkLookup network={network} />
       </section>
     </div>

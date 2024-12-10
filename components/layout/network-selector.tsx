@@ -10,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const formatNetworkName = (network: NetworkType) => 
+  network === "mainnet" ? "Mainnet" : "Testnet";
+
 export function NetworkSelector() {
   const { network, setNetwork, isNetworkChanging } = useNetwork();
 
@@ -32,7 +35,7 @@ export function NetworkSelector() {
             isNetworkChanging && "opacity-50 cursor-not-allowed"
           )}
         >
-          {net === "mainnet" ? "Mainnet" : "Testnet"}
+          {formatNetworkName(net)}
           {network === net && !isNetworkChanging && (
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-current" />
           )}
@@ -57,7 +60,7 @@ export function NetworkSelector() {
               isNetworkChanging && "opacity-50 cursor-not-allowed"
             )}
           >
-            {network}
+            {formatNetworkName(network)}
             {!isNetworkChanging && (
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-current" />
             )}
@@ -70,7 +73,7 @@ export function NetworkSelector() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setNetwork(alternativeNetwork)} className="font-mono">
-            Switch to {alternativeNetwork}
+            Switch to {formatNetworkName(alternativeNetwork)}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

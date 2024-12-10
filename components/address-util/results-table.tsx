@@ -5,6 +5,7 @@ import { getFlowscanUrl } from '@/lib/utils/network';
 import { Copy, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { shortenAddress } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ResultsTableProps {
   results: Array<{
@@ -66,13 +67,15 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <button
+        <Button
           onClick={exportToCSV}
-          className="flex items-center gap-2 text-sm link-hover"
+          variant="outline"
+          size="sm"
+          className="gap-2"
         >
           <Download className="h-4 w-4" />
           Export CSV
-        </button>
+        </Button>
       </div>
 
       <div className="rounded-lg border">

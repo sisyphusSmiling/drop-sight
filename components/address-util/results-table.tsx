@@ -28,7 +28,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
 
   const exportToCSV = () => {
     const csvData = `Flow Address,EVM Address\n${results.map(r => `${r.flowAddress || 'N/A'},${r.evmAddress || 'N/A'}`).join('\n')}`;
-    
+
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -38,15 +38,23 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
     window.URL.revokeObjectURL(url);
   };
 
-  const renderAddress = (address: string | null) => {
+  const renderAddress = (address: string | null, type: 'flow' | 'evm') => {
     if (!address || address === 'N/A') {
       return <span className="na-text">N/A</span>;
     }
 
+    const baseUrl = getFlowscanUrl(network, type);
+    const formattedAddress = type === 'flow' && address.startsWith('0x')
+      ? address.slice(2)
+      : address;
+    const url = type === 'flow'
+      ? `${baseUrl}/account/${formattedAddress}`
+      : `${baseUrl}/address/${address}`;
+
     return (
       <div className="address-container">
         <a
-          href={`${getFlowscanUrl(network)}${address.startsWith('0x') ? '/contract/A.1654653399040a61.FlowEVMToken/address/' : '/account/'}${address}`}
+          href={url}
           target="_blank"
           rel="noopener noreferrer"
           className="link-hover"
@@ -56,7 +64,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
         <button
           onClick={() => copyToClipboard(address)}
           className="copy-button"
-          aria-label={`Copy ${address.startsWith('0x') ? 'EVM' : 'Flow'} address`}
+          aria-label={`Copy ${type === 'flow' ? 'Flow' : 'EVM'} address`}
         >
           <Copy className="copy-icon" />
         </button>
@@ -91,10 +99,10 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
               {results.map((result, index) => (
                 <tr key={index} className="border-b">
                   <td className="p-4 align-middle">
-                    {renderAddress(result.flowAddress)}
+                    {renderAddress(result.flowAddress, 'flow')}
                   </td>
                   <td className="p-4 align-middle">
-                    {renderAddress(result.evmAddress)}
+                    {renderAddress(result.evmAddress, 'evm')}
                   </td>
                 </tr>
               ))}
@@ -104,4 +112,4 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
       </div>
     </div>
   );
-} 
+}

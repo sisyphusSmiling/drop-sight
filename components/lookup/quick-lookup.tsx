@@ -44,9 +44,13 @@ export function QuickLookup({ network }: QuickLookupProps) {
       return <span className="na-text">N/A</span>;
     }
 
+    const baseUrl = getFlowscanUrl(network, type);
+    const formattedAddress = type === 'flow' && address.startsWith('0x')
+      ? address.slice(2)
+      : address;
     const url = type === 'flow'
-      ? `${getFlowscanUrl(network)}/account/${address}`
-      : `${getFlowscanUrl(network)}/contract/A.1654653399040a61.FlowEVMToken/address/${address}`;
+      ? `${baseUrl}/account/${formattedAddress}`
+      : `${baseUrl}/address/${address}`;
 
     return (
       <div className="address-container">
@@ -127,7 +131,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
               <h3 className="text-sm font-medium text-muted-foreground">Transaction</h3>
               <div className="address-container">
                 <a
-                  href={`${getFlowscanUrl(network)}/transaction/${result.transactionId}`}
+                  href={`${getFlowscanUrl(network, 'flow')}/transaction/${result.transactionId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link-hover"

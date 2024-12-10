@@ -8,6 +8,7 @@ import { NetworkSelector } from '@/components/layout/network-selector';
 import { useNetwork } from '@/lib/context/network-context';
 import { SectionHeader } from '@/components/ui/section-header';
 import { Divider } from '@/components/ui/divider';
+import Link from 'next/link';
 
 export default function Home() {
   const { network } = useNetwork();
@@ -26,7 +27,17 @@ export default function Home() {
           </h1>
           <NetworkSelector />
         </div>
-        <p className="text-muted-foreground text-sm sm:text-base">Lookup cross-VM account associations on Flow</p>
+        <p className="text-muted-foreground text-sm sm:text-base">
+          Lookup cross-VM account associations on{' '}
+          <Link 
+            href="https://flow.com" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-primary/80 transition-colors"
+          >
+            Flow
+          </Link>
+        </p>
       </div>
       
       {/* Quick Lookup Section */}

@@ -91,7 +91,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap flex items-center gap-2 text-sm font-medium"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 whitespace-nowrap flex items-center gap-2 text-sm font-bold"
         >
           {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
           {isLoading ? 'Looking up...' : 'Lookup'}

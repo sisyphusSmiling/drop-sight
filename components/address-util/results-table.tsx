@@ -1,7 +1,8 @@
 'use client'
 
 import { getFlowscanUrl, getEvmFlowscanUrl } from '@/lib/utils/network';
-import { Download } from 'lucide-react';
+import { Copy, Download } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 interface ResultsTableProps {
   results: Record<string, string | null>;
@@ -9,11 +10,21 @@ interface ResultsTableProps {
 }
 
 export function ResultsTable({ results, network }: ResultsTableProps) {
+  const { toast } = useToast();
+
   const truncateAddress = (addr: string | null) => {
     if (!addr) return "N/A";
     if (addr === "N/A") return addr;
     if (window.innerWidth > 640) return addr;
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast({
+        title: "Address copied!"
+      });
+    });
   };
 
   const exportToCSV = () => {
@@ -55,27 +66,45 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
               {Object.entries(results).map(([flowAddress, evmAddress]) => (
                 <tr key={flowAddress} className="border-b last:border-0">
                   <td className="px-4 py-3">
-                    <a
-                      href={`${getFlowscanUrl(network)}/account/${flowAddress}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono font-medium text-primary hover:underline break-all"
-                    >
-                      {truncateAddress(flowAddress)}
-                    </a>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`${getFlowscanUrl(network)}/account/${flowAddress}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono font-medium text-primary hover:underline break-all text-sm"
+                      >
+                        {truncateAddress(flowAddress)}
+                      </a>
+                      <button
+                        onClick={() => copyToClipboard(flowAddress)}
+                        className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                        aria-label="Copy Flow address"
+                      >
+                        <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                      </button>
+                    </div>
                   </td>
                   <td className="px-4 py-3">
                     {evmAddress && evmAddress !== "N/A" ? (
-                      <a
-                        href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono font-medium text-primary hover:underline break-all"
-                      >
-                        {truncateAddress(evmAddress)}
-                      </a>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={`${getEvmFlowscanUrl(network)}/address/${evmAddress}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono font-medium text-primary hover:underline break-all text-sm"
+                        >
+                          {truncateAddress(evmAddress)}
+                        </a>
+                        <button
+                          onClick={() => copyToClipboard(evmAddress)}
+                          className="p-1 hover:bg-muted rounded-md transition-colors shrink-0"
+                          aria-label="Copy EVM address"
+                        >
+                          <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                        </button>
+                      </div>
                     ) : (
-                      <span className="text-muted-foreground">N/A</span>
+                      <span className="text-muted-foreground text-sm">N/A</span>
                     )}
                   </td>
                 </tr>

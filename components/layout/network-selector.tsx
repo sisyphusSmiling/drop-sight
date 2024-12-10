@@ -32,7 +32,7 @@ export function NetworkSelector() {
             isNetworkChanging && "opacity-50 cursor-not-allowed"
           )}
         >
-          {net}
+          {net === "mainnet" ? "Mainnet" : "Testnet"}
           {network === net && !isNetworkChanging && (
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-current" />
           )}

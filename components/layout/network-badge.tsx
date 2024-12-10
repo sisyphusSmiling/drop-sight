@@ -22,7 +22,7 @@ export function NetworkBadge() {
         network === "mainnet" ? "network-badge-mainnet" : "network-badge-testnet"
       )}
     >
-      {network}
+      {network === "mainnet" ? "Mainnet" : "Testnet"}
       <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-current" />
     </div>
   );

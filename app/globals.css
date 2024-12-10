@@ -13,8 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
 
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -28,9 +28,9 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --border: 240 5.9% 40%;
+    --input: 240 5.9% 40%;
+    --ring: 142.1 76.2% 36.3%;
 
     --radius: 0.5rem;
 
@@ -45,25 +45,25 @@
     --chart-5: 27 87% 67%;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
+    --muted: 0 0% 15%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --accent: 12 6.5% 15.1%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 5% 75%;
+    --input: 240 5% 75%;
+    --ring: 142.4 71.8% 29.2%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -83,7 +83,7 @@
 
 @layer components {
   .network-badge {
-    @apply px-3 py-1 rounded-md capitalize text-sm font-mono font-bold transition-colors;
+    @apply px-3 py-1.5 rounded-lg font-mono text-sm;
   }
 
   .network-badge-mainnet {
@@ -95,7 +95,7 @@
   }
 
   .link-hover {
-    @apply text-foreground hover:text-green-500 hover:underline transition-colors;
+    @apply text-foreground hover:text-primary transition-colors;
   }
 
   .na-text {
@@ -103,14 +103,14 @@
   }
 
   .address-container {
-    @apply flex items-center gap-2 font-mono;
+    @apply flex items-center gap-2;
   }
 
   .copy-button {
-    @apply p-1 hover:bg-muted rounded-md transition-colors shrink-0;
+    @apply p-1 hover:bg-muted rounded-md;
   }
 
   .copy-icon {
-    @apply h-3.5 w-3.5 text-muted-foreground;
+    @apply h-4 w-4;
   }
 } 

@@ -65,21 +65,19 @@ class Analytics {
     properties: EventProperties = {}
   ) {
     // Google Analytics
-    if (window.gtag) {
+    if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', name, {
         event_category: category,
         ...properties,
       });
-    }
 
-    // Log events in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[Analytics] ${category}:${name}`, properties);
+      // Log events in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[Analytics] ${category}:${name}`, properties);
+      }
+    } else if (process.env.NODE_ENV === 'development') {
+      console.warn('[Analytics] gtag not available');
     }
-
-    // Future: Add additional analytics services
-    // this.trackAmplitude(name, properties);
-    // this.trackMixpanel(name, properties);
   }
 
   /**

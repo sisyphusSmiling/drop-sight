@@ -2,7 +2,7 @@
 
 import { useTheme } from '@/lib/context/theme-context';
 import { Button } from '@/components/ui/button';
-import { analytics } from '@/lib/utils/analytics';
+import { analytics, EventCategory, EventName } from '@/lib/utils/analytics';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,7 @@ export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
 
   const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
-    analytics.trackInteraction('theme_switch', {
+    analytics.trackEvent(EventCategory.INTERACTION, EventName.THEME_SWITCH, {
       from: theme,
       to: newTheme
     });

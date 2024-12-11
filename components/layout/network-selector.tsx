@@ -3,6 +3,7 @@
 import { NetworkType, useNetwork } from "@/lib/context/network-context";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Loader2 } from "lucide-react";
+import { analytics } from "@/lib/utils/analytics";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,13 +20,21 @@ export function NetworkSelector() {
   const networks: NetworkType[] = ["mainnet", "testnet"];
   const alternativeNetwork = networks.find(n => n !== network)!;
 
+  const handleNetworkChange = (newNetwork: NetworkType) => {
+    analytics.trackInteraction('network_switch', {
+      from: network,
+      to: newNetwork
+    });
+    setNetwork(newNetwork);
+  };
+
   // Desktop view - show both networks
   const DesktopSelector = () => (
     <div className="hidden sm:flex items-center gap-2">
       {networks.map((net) => (
         <button
           key={net}
-          onClick={() => setNetwork(net)}
+          onClick={() => handleNetworkChange(net)}
           disabled={isNetworkChanging}
           className={cn(
             "network-badge flex items-center gap-2",
@@ -72,7 +81,10 @@ export function NetworkSelector() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setNetwork(alternativeNetwork)} className="font-mono">
+          <DropdownMenuItem 
+            onClick={() => handleNetworkChange(alternativeNetwork)} 
+            className="font-mono"
+          >
             Switch to {formatNetworkName(alternativeNetwork)}
           </DropdownMenuItem>
         </DropdownMenuContent>

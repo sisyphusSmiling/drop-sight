@@ -6,6 +6,7 @@ import { Copy, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { shortenAddress } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { analytics } from '@/lib/utils/analytics';
 
 interface ResultsTableProps {
   results: Array<{
@@ -18,8 +19,12 @@ interface ResultsTableProps {
 export function ResultsTable({ results, network }: ResultsTableProps) {
   const { toast } = useToast();
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, type: 'flow' | 'evm') => {
     navigator.clipboard.writeText(text).then(() => {
+      analytics.trackInteraction('copy_address', {
+        network,
+        addressType: type
+      });
       toast({
         title: "Address copied!"
       });
@@ -28,6 +33,11 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
 
   const exportToCSV = () => {
     const csvData = `Flow Address,EVM Address\n${results.map(r => `${r.flowAddress || 'N/A'},${r.evmAddress || 'N/A'}`).join('\n')}`;
+    
+    analytics.trackInteraction('export_csv', {
+      network,
+      resultCount: results.length
+    });
 
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -62,7 +72,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
           {window.innerWidth > 640 ? address : shortenAddress(address)}
         </a>
         <button
-          onClick={() => copyToClipboard(address)}
+          onClick={() => copyToClipboard(address, type)}
           className="copy-button"
           aria-label={`Copy ${type === 'flow' ? 'Flow' : 'EVM'} address`}
         >

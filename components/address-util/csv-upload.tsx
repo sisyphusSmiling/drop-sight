@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Papa from 'papaparse';
+import { analytics } from '@/lib/utils/analytics';
 
 interface CSVUploadProps {
   onAddressesLoaded: (addresses: string[]) => void;
@@ -12,6 +13,11 @@ export const CSVUpload = ({ onAddressesLoaded, onError }: CSVUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFile = (file: File) => {
+    analytics.trackInteraction('csv_upload', {
+      fileName: file.name,
+      fileSize: file.size
+    });
+
     Papa.parse(file, {
       complete: (results) => {
         const addresses = results.data
@@ -21,14 +27,28 @@ export const CSVUpload = ({ onAddressesLoaded, onError }: CSVUploadProps) => {
           .map(addr => addr.startsWith('0x') ? addr : `0x${addr}`);
 
         if (addresses.length === 0) {
-          onError('No valid addresses found in CSV');
+          const error = 'No valid addresses found in CSV';
+          analytics.trackEvent('error', 'csv_error', {
+            error,
+            fileName: file.name
+          });
+          onError(error);
           return;
         }
 
+        analytics.trackLookupSuccess('bulk', {
+          addressCount: addresses.length,
+          fileName: file.name
+        });
         onAddressesLoaded(addresses);
       },
       error: (error) => {
-        onError(`Error parsing CSV: ${error.message}`);
+        const errorMessage = `Error parsing CSV: ${error.message}`;
+        analytics.trackEvent('error', 'csv_error', {
+          error: errorMessage,
+          fileName: file.name
+        });
+        onError(errorMessage);
       },
     });
   };

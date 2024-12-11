@@ -8,6 +8,7 @@ import { Copy, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { shortenAddress } from '@/lib/utils';
+import { analytics } from '@/lib/utils/analytics';
 
 interface QuickLookupProps {
   network: NetworkType;
@@ -31,8 +32,12 @@ export function QuickLookup({ network }: QuickLookupProps) {
     inputRef.current?.focus();
   });
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, type: 'flow' | 'evm') => {
     navigator.clipboard.writeText(text).then(() => {
+      analytics.trackInteraction('copy_address', { 
+        network, 
+        addressType: type 
+      });
       toast({
         title: "Address copied!"
       });
@@ -59,11 +64,17 @@ export function QuickLookup({ network }: QuickLookupProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="link-hover"
+          onClick={() => {
+            analytics.trackInteraction('flowscan_click', {
+              network,
+              addressType: type
+            });
+          }}
         >
           {window.innerWidth > 640 ? address : shortenAddress(address)}
         </a>
         <button
-          onClick={() => copyToClipboard(address)}
+          onClick={() => copyToClipboard(address, type)}
           className="copy-button"
           aria-label={`Copy ${type === 'flow' ? 'Flow' : 'EVM'} address`}
         >
@@ -81,7 +92,17 @@ export function QuickLookup({ network }: QuickLookupProps) {
     try {
       const result = await lookupAddress(inputAddress, network);
       setResult(result);
+      analytics.trackLookupSuccess('quick', {
+        network,
+        addressType: inputAddress.length === 42 ? 'evm' : 'flow',
+        hasFlowAddress: !!result.flowAddress,
+        hasEvmAddress: !!result.evmAddress
+      });
     } catch (error: any) {
+      analytics.trackLookupError('quick', error.message, {
+        network,
+        addressType: inputAddress.length === 42 ? 'evm' : 'flow'
+      });
       toast({
         title: "Error",
         description: error.message,

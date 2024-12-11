@@ -29,10 +29,11 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Check localStorage first
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(storageKey);
-      if (stored) return stored as Theme;
+      if (stored === 'light' || stored === 'dark' || stored === 'system') {
+        return stored;
+      }
     }
     return defaultTheme;
   });
@@ -44,8 +45,10 @@ export function ThemeProvider({
     function applyTheme() {
       if (theme === 'system') {
         root.classList.toggle('dark', mediaQuery.matches);
+        localStorage.removeItem(storageKey);
       } else {
         root.classList.toggle('dark', theme === 'dark');
+        localStorage.setItem(storageKey, theme);
       }
     }
 
@@ -53,22 +56,10 @@ export function ThemeProvider({
     applyTheme();
 
     return () => mediaQuery.removeEventListener('change', applyTheme);
-  }, [theme]);
-
-  const setThemeWithStorage = useCallback((newTheme: Theme) => {
-    setTheme(newTheme);
-    if (newTheme !== 'system') {
-      localStorage.setItem(storageKey, newTheme);
-    }
-  }, [storageKey]);
-
-  const value = {
-    theme,
-    setTheme: setThemeWithStorage,
-  };
+  }, [theme, storageKey]);
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme }}>
       {children}
     </ThemeProviderContext.Provider>
   );

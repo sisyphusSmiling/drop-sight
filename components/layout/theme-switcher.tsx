@@ -2,6 +2,7 @@
 
 import { useTheme } from '@/lib/context/theme-context';
 import { Button } from '@/components/ui/button';
+import { analytics } from '@/lib/utils/analytics';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,14 @@ import { Monitor, Moon, Sun } from 'lucide-react';
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
 
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+    analytics.trackInteraction('theme_switch', {
+      from: theme,
+      to: newTheme
+    });
+    setTheme(newTheme);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -23,15 +32,15 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('light')}>
           <Sun className="mr-2 h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('dark')}>
           <Moon className="mr-2 h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem onClick={() => handleThemeChange('system')}>
           <Monitor className="mr-2 h-4 w-4" />
           <span>System</span>
         </DropdownMenuItem>

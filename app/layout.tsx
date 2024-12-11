@@ -126,6 +126,36 @@ export default function RootLayout({
             `,
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "DropSight",
+              "description": "Look up cross-VM account associations on Flow blockchain",
+              "url": "https://dropsight.xyz",
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Any",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "featureList": [
+                "Cross-VM account lookup",
+                "Flow blockchain integration",
+                "Mainnet and testnet support",
+                "Bulk address lookup",
+                "CSV export functionality"
+              ],
+              "screenshot": {
+                "@type": "ImageObject",
+                "url": "https://dropsight.xyz/og.png"
+              }
+            })
+          }}
+        />
       </head>
       <body className={cn(inter.className, jetbrainsMono.variable)}>
         <ThemeProvider>

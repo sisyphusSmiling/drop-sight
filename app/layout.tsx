@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Toaster } from "@/components/ui/toaster"
 import { Footer } from '@/components/layout/footer'
 import { NetworkProvider } from '@/lib/context/network-context'
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from '@/components/layout/analytics'
 import { cn } from '@/lib/utils'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/lib/context/theme-context'
@@ -71,7 +71,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                let theme = localStorage.getItem('theme')
+                if (theme === 'system' || !theme) {
+                  theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+                }
+                if (theme === 'dark') {
                   document.documentElement.classList.add('dark')
                 } else {
                   document.documentElement.classList.remove('dark')

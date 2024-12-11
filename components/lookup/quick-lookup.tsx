@@ -8,7 +8,7 @@ import { Copy, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { shortenAddress } from '@/lib/utils';
-import { analytics } from '@/lib/utils/analytics';
+import { analytics, EventCategory, EventName } from '@/lib/utils/analytics';
 
 interface QuickLookupProps {
   network: NetworkType;
@@ -34,13 +34,20 @@ export function QuickLookup({ network }: QuickLookupProps) {
 
   const copyToClipboard = (text: string, type: 'flow' | 'evm') => {
     navigator.clipboard.writeText(text).then(() => {
-      analytics.trackInteraction('copy_address', { 
-        network, 
-        addressType: type 
+      analytics.trackEvent(EventCategory.INTERACTION, EventName.COPY_ADDRESS, {
+        addressType: type,
+        network
       });
       toast({
         title: "Address copied!"
       });
+    });
+  };
+
+  const handleFlowscanClick = (type: 'flow' | 'evm') => {
+    analytics.trackEvent(EventCategory.INTERACTION, EventName.FLOWSCAN_CLICK, {
+      addressType: type,
+      network
     });
   };
 
@@ -64,12 +71,7 @@ export function QuickLookup({ network }: QuickLookupProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="link-hover"
-          onClick={() => {
-            analytics.trackInteraction('flowscan_click', {
-              network,
-              addressType: type
-            });
-          }}
+          onClick={() => handleFlowscanClick(type)}
         >
           {window.innerWidth > 640 ? address : shortenAddress(address)}
         </a>

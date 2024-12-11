@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     'blockchain explorer',
     'address converter'
   ],
-  authors: [{ name: 'Gio', url: 'https://x.com/gio_incognito' }],
-  creator: 'Gio',
+  authors: [{ name: 'Giovanni Sanchez', url: 'https://x.com/gio_incognito' }],
+  creator: 'Giovanni Sanchez',
   publisher: 'DropSight',
   robots: {
     index: true,
@@ -69,10 +69,6 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      {
-        url: '/favicon.ico',
-        sizes: 'any',
-      },
       {
         url: '/favicon.png',
         type: 'image/png',

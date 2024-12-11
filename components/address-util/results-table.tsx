@@ -6,7 +6,7 @@ import { Copy, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { shortenAddress } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { analytics } from '@/lib/utils/analytics';
+import { analytics, EventCategory, EventName } from '@/lib/utils/analytics';
 
 interface ResultsTableProps {
   results: Array<{
@@ -21,9 +21,9 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
 
   const copyToClipboard = (text: string, type: 'flow' | 'evm') => {
     navigator.clipboard.writeText(text).then(() => {
-      analytics.trackInteraction('copy_address', {
-        network,
-        addressType: type
+      analytics.trackEvent(EventCategory.INTERACTION, EventName.COPY_ADDRESS, {
+        addressType: type,
+        network
       });
       toast({
         title: "Address copied!"
@@ -31,19 +31,25 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
     });
   };
 
+  const handleFlowscanClick = (type: 'flow' | 'evm') => {
+    analytics.trackEvent(EventCategory.INTERACTION, EventName.FLOWSCAN_CLICK, {
+      addressType: type,
+      network
+    });
+  };
+
   const exportToCSV = () => {
     const csvData = `Flow Address,EVM Address\n${results.map(r => `${r.flowAddress || 'N/A'},${r.evmAddress || 'N/A'}`).join('\n')}`;
-    
-    analytics.trackInteraction('export_csv', {
-      network,
-      resultCount: results.length
-    });
-
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = 'address-lookup-results.csv';
+
+    analytics.trackEvent(EventCategory.INTERACTION, EventName.EXPORT_CSV, {
+      addressCount: results.length
+    });
+
     link.click();
     window.URL.revokeObjectURL(url);
   };
@@ -68,6 +74,7 @@ export function ResultsTable({ results, network }: ResultsTableProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="link-hover"
+          onClick={() => handleFlowscanClick(type)}
         >
           {window.innerWidth > 640 ? address : shortenAddress(address)}
         </a>

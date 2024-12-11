@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'DropSight 🎯 | Flow Blockchain Address Lookup Tool',
-  description: 'Easily lookup and verify cross-VM account associations on Flow blockchain. Convert between Flow (Cadence) and EVM addresses with our free tool.',
+  description: 'Easily lookup and verify cross-VM accounts across Cadence & EVM on Flow blockchain with this free tool.',
   keywords: [
     'Flow blockchain',
     'Cadence address',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     title: 'DropSight 🎯 | Flow Blockchain Address Lookup Tool',
-    description: 'Easily lookup and verify cross-VM account associations on Flow blockchain. Convert between Flow (Cadence) and EVM addresses with our free tool.',
+    description: 'Easily lookup and verify cross-VM accounts across Cadence & EVM on Flow blockchain with this free tool.',
     siteName: 'DropSight',
     locale: 'en_US',
     images: [{
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'DropSight 🎯 | Flow Blockchain Address Lookup Tool',
-    description: 'Easily lookup and verify cross-VM account associations on Flow blockchain. Convert between Flow (Cadence) and EVM addresses with our free tool.',
+    description: 'Easily lookup and verify cross-VM accounts across Cadence & EVM on Flow blockchain with this free tool.',
     creator: '@gio_incognito',
     images: ['/og.png'],
   },
@@ -137,11 +137,6 @@ export default function RootLayout({
               "url": "https://dropsight.xyz",
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "Any",
-              "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-              },
               "featureList": [
                 "Cross-VM account lookup",
                 "Flow blockchain integration",
